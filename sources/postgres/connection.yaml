@@ -1,0 +1,8 @@
+# This file was automatically generated
+name: postgres
+type: postgres
+options:
+  host: localhost
+  port: 55432
+  database: analytics
+  schema: public

@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: analytics
+      POSTGRES_USER: ai
+      POSTGRES_PASSWORD: password
+    ports:
+      - "55432:5432"
