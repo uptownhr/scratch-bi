@@ -27,7 +27,7 @@ order by 1 desc
     y=total_users
     y2=new_users
     y2SeriesType=bar
-    title = "New Users Added"
+    title = "New Users Added by {inputs.agg}"
 />
 
 ```sql users_status
@@ -58,7 +58,7 @@ ORDER BY 1, 2
     y=new_users
     series = status
     type = stacked100
-    title = "User Status"
+    title = "User Status by {inputs.agg}"
 />
 
 ```sql churned_users
@@ -74,29 +74,27 @@ group by 1
 <BarChart
     data={churned_users}
     y=new_users
-    title = "Churned by Month"
+    title = "Churned by {inputs.agg}"
 />
 
 ```sql active_users
 with base as (
   select 
-    date_trunc('${inputs.agg}', last_visited) as month,
-    id
-  from postgres.users
-  where last_visited > '2023-01-01'
-  group by 1,2
+    date_trunc('day', created) as day
+    , user_id
+  from postgres.log
+  group by 1, 2
 )
-select 
-    month
-    , count(*) as users
+
+select
+  date_trunc('${inputs.agg}', day) as time
+  , count(*) as users 
 from base
 group by 1
 ```
 
-<LineChart
+<BarChart
     data={active_users}
     y=users
-    title = "Active Users"
+    title = "Active Users by {inputs.agg} - last log (search, click)"
 />
-
-

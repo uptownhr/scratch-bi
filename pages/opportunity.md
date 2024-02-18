@@ -34,5 +34,28 @@ group by 1
 <BarChart
     data={user_likes}
     y=new_likes
-    title = "New Opportunity Likes"
+    title = "New Opportunity Likes by {inputs.agg}"
+/>
+
+```sql user_count_likes
+with by_day as (
+    select 
+      date_trunc('day', created) as day,
+      user_id,
+    from postgres.likes
+    where created > '2023-08-01'
+    group by 1, 2
+)
+
+select 
+  date_trunc('${inputs.agg}', day) as time
+  , count(*) as users
+from by_day
+group by 1
+```
+
+<BarChart
+    data={user_count_likes}
+    y=users
+    title = "Users that Liked by {inputs.agg}"
 />

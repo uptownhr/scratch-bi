@@ -7,7 +7,9 @@
     "dev": "evidence dev --open /",
     "test": "evidence build",
     "sources": "evidence sources",
-    "preview": "evidence preview"
+    "preview": "evidence preview",
+    "deploy": "netlify deploy --dir=build",
+    "deploy:prod": "netlify deploy --dir=build --prod"
   },
   "engines": {
     "npm": ">=7.0.0",

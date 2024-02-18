@@ -2,7 +2,7 @@
 title: Search
 ---
 
-<Dropdown name=agg>
+<Dropdown title="Aggregate" name=agg>
     <DropdownOption valueLabel="Monthly" value="month" />
     <DropdownOption valueLabel="Weekly" value="week" />
     <DropdownOption valueLabel="Daily" value="day" />
@@ -17,10 +17,10 @@ where action = 'search'
 group by 1
 ```
 
-<LineChart
+<BarChart
 data={user_search}
 y=new_searches
-title = "Users Searches"
+title = "Total Searches by {inputs.agg}"
 />
 
 
@@ -29,8 +29,7 @@ title = "Users Searches"
 with users_searched as (
     select 
       date_trunc('${inputs.agg}', created) as searched_date,
-      user_id,
-      count(*) as new_searches
+      user_id
     from postgres.log
     where action = 'search'
     group by 1, 2
@@ -46,11 +45,8 @@ group by 1
 order by 2 desc
 ```
 
-<LineChart
+<BarChart
     data={users_that_searched}
     y=users
-    title = "Users Searches"
+    title = "Users that Searched by {inputs.agg}"
 />
-
-<DataTable data="{users_that_searched}" search="true" />
-
