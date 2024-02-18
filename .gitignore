@@ -8,3 +8,5 @@ static/data
 .vscode/settings.json
 .evidence
 .idea
+# Local Netlify folder
+.netlify
