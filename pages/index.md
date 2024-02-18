@@ -2,8 +2,11 @@
 title: Haven James Data Exploration
 ---
 
-
-
+<Dropdown name=agg>
+    <DropdownOption valueLabel="Monthly" value="month" />
+    <DropdownOption valueLabel="Weekly" value="week" />
+    <DropdownOption valueLabel="Daily" value="day" />
+</Dropdown>
 
 ```sql users_added
 SELECT 
@@ -16,8 +19,8 @@ WHERE created > '2023-01-01'
 and status in ('active', 'cancelled')
 GROUP BY 1
 order by 1 desc
-
 ```
+
 <LineChart
     data={users_added}
     x=month
