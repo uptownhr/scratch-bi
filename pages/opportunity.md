@@ -1,7 +1,7 @@
 ---
 title: Opportunity
 ---
-<Dropdown itle="Aggregate" name=agg>
+<Dropdown title="Aggregate" name=agg>
     <DropdownOption valueLabel="Monthly" value="month" />
     <DropdownOption valueLabel="Weekly" value="week" />
     <DropdownOption valueLabel="Daily" value="day" />
