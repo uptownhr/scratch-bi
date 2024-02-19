@@ -83,6 +83,8 @@ with base as (
     date_trunc('day', created) as day
     , user_id
   from postgres.log
+  where 1=1
+  and created > '2023-06-01'
   group by 1, 2
 )
 
@@ -91,10 +93,39 @@ select
   , count(*) as users 
 from base
 group by 1
+order by 1 desc
 ```
 
 <BarChart
     data={active_users}
     y=users
-    title = "Active Users by {inputs.agg} - last log (search, click)"
+    title = "Active Users by {inputs.agg} - last log (click, search)"
+/>
+
+```sql user_activity
+with base as (
+  select 
+    date_trunc('day', created) as day
+    , action
+    , user_id
+  from postgres.log
+  where 1=1
+  and created > '2023-06-01'
+  group by 1, 2, 3
+)
+
+select
+  date_trunc('${inputs.agg}', day) as time
+  , action
+  , count(*) as users 
+from base
+group by 1, 2
+order by 1 desc
+```
+
+<BarChart
+    data={user_activity}
+    y=users
+    title = "User Activity by {inputs.agg}"
+    series = action
 />
