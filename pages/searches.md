@@ -23,6 +23,7 @@ select
   count(*) as new_searches
 from postgres.log
 where action = 'search'
+and week > current_date - interval '${inputs.days_ago} days'
 group by 1
 ```
 
