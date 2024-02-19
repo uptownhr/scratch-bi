@@ -8,6 +8,15 @@ title: Search
     <DropdownOption valueLabel="Daily" value="day" />
 </Dropdown>
 
+<Dropdown title="Date Range" name=days_ago>
+    <DropdownOption valueLabel="Last Year" value="365" />
+    <DropdownOption valueLabel="Last 6 Month" value="182" />
+    <DropdownOption valueLabel="Last Quarter" value="91" />
+    <DropdownOption valueLabel="Last Month" value="30" />
+    <DropdownOption valueLabel="Last Week" value="7" />
+    <DropdownOption valueLabel="All" value="9999" />
+</Dropdown>
+
 ```sql user_search
 select 
   date_trunc('${inputs.agg}', created) as week,
@@ -40,7 +49,8 @@ select
   searched_date
   , count(*) as users
 from users_searched
--- where searched_date > '2024-02-01'
+where 1=1
+and searched_date > current_date - interval '${inputs.days_ago} days'
 group by 1
 order by 2 desc
 ```

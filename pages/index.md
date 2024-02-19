@@ -2,10 +2,19 @@
 title: Haven James Data Exploration
 ---
 
-<Dropdown name=agg>
+<Dropdown title="Aggregate" name=agg>
     <DropdownOption valueLabel="Monthly" value="month" />
     <DropdownOption valueLabel="Weekly" value="week" />
     <DropdownOption valueLabel="Daily" value="day" />
+</Dropdown>
+
+<Dropdown title="Date Range" name=days_ago>
+    <DropdownOption valueLabel="Last Year" value="365" />
+    <DropdownOption valueLabel="Last 6 Month" value="182" />
+    <DropdownOption valueLabel="Last Quarter" value="91" />
+    <DropdownOption valueLabel="Last Month" value="30" />
+    <DropdownOption valueLabel="Last Week" value="7" />
+    <DropdownOption valueLabel="All" value="9999" />
 </Dropdown>
 
 ```sql users_added
@@ -15,7 +24,8 @@ SELECT
   SUM(COUNT(*)) OVER (ORDER BY date_trunc('${inputs.agg}', created)) AS total_users,
   
 FROM postgres.users
-WHERE created > '2023-01-01'
+WHERE 1=1 
+and created > current_date - interval '${inputs.days_ago} days'
 and status in ('active', 'cancelled')
 GROUP BY 1
 order by 1 desc
@@ -37,7 +47,8 @@ WITH user_status_counts AS (
     status,
     COUNT(*) AS new_users
   FROM postgres.users
-  WHERE created > '2023-01-01'
+  WHERE 1=1
+    and created > current_date - interval '${inputs.days_ago} days'
     AND status IS NOT NULL 
     AND status != ''
   GROUP BY 1, 2
@@ -66,7 +77,8 @@ select
   date_trunc('${inputs.agg}', cancelled) as month,
   count(*) as new_users
 from postgres.users
-where created > '2023-01-01'
+where 1=1
+and created > current_date - interval '${inputs.days_ago} days'
 and status = 'cancelled'
 group by 1
 ```
@@ -84,7 +96,7 @@ with base as (
     , user_id
   from postgres.log
   where 1=1
-  and created > '2023-06-01'
+  and created > current_date - interval '${inputs.days_ago} days'
   group by 1, 2
 )
 
@@ -110,7 +122,7 @@ with base as (
     , user_id
   from postgres.log
   where 1=1
-  and created > '2023-06-01'
+  and created > current_date - interval '${inputs.days_ago} days'
   group by 1, 2, 3
 )
 

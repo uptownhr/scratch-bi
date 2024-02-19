@@ -1,10 +1,19 @@
 ---
 title: Opportunity
 ---
-<Dropdown name=agg>
+<Dropdown itle="Aggregate" name=agg>
     <DropdownOption valueLabel="Monthly" value="month" />
     <DropdownOption valueLabel="Weekly" value="week" />
     <DropdownOption valueLabel="Daily" value="day" />
+</Dropdown>
+
+<Dropdown title="Date Range" name=days_ago>
+    <DropdownOption valueLabel="Last Year" value="365" />
+    <DropdownOption valueLabel="Last 6 Month" value="182" />
+    <DropdownOption valueLabel="Last Quarter" value="91" />
+    <DropdownOption valueLabel="Last Month" value="30" />
+    <DropdownOption valueLabel="Last Week" value="7" />
+    <DropdownOption valueLabel="All" value="9999" />
 </Dropdown>
 
 ```sql opportunities_created
@@ -12,7 +21,8 @@ select
   date_trunc('${inputs.agg}', created) as week,
   count(*) as new_opportunities
 from postgres.opportunity
-where created > '2023-01-01'
+where 1=1 
+and created > current_date - interval '${inputs.days_ago} days'
 group by 1
 ```
 
@@ -27,7 +37,8 @@ select
   date_trunc('${inputs.agg}', created) as week,
   count(*) as new_likes
 from postgres.likes
-where created > '2023-08-01'
+where 1=1 
+and created > current_date - interval '${inputs.days_ago} days'
 group by 1
 ```
 
@@ -43,7 +54,8 @@ with by_day as (
       date_trunc('day', created) as day,
       user_id,
     from postgres.likes
-    where created > '2023-08-01'
+    where 1=1
+    and created > current_date - interval '${inputs.days_ago} days'
     group by 1, 2
 )
 
